@@ -19,17 +19,14 @@ namespace Calculator_WPF
     {
         double lastNumber, result;
         SelectedOperator selectedOperator;
-       
+
         public MainWindow()
         {
             InitializeComponent();
-            ACButton.Click += ACButton_Click;
-            negativeButton.Click += NegativeButton_Click;
-            percentButton.Click += PercentButton_Click;
-            //equalButton.Click += EqualButton_Click;
-
         }
-        //equal button 
+
+
+        #region Equal button handler 
         private void EqualButton_Click(object sender, RoutedEventArgs e)
         {
             double newNumber;
@@ -54,18 +51,27 @@ namespace Calculator_WPF
             resultLable.Content = result.ToString();
 
         }
-        //percent button
+        #endregion
+
+
+        #region percent button handler 
         private void PercentButton_Click(object sender, RoutedEventArgs e)
         {
             double tempNumber;
             if (double.TryParse(resultLable.Content.ToString(), out tempNumber))
             {
                 tempNumber = tempNumber / 100;
-                resultLable.Content = tempNumber.ToString();
+                if(lastNumber != 0)
+                {
+                    tempNumber *= lastNumber;
+                    resultLable.Content = tempNumber.ToString();
+
+                }
             }
         }
+        #endregion
 
-        //point button
+        #region point button handler 
         private void PointButton_Click(object sender, RoutedEventArgs e)
         {
             if (resultLable.Content.ToString().Contains("."))
@@ -74,35 +80,36 @@ namespace Calculator_WPF
             }
             else
             {
-                resultLable.Content= $"{resultLable.Content}.";
+                resultLable.Content = $"{resultLable.Content}.";
             }
-           
-        }
 
-       
-        //negative button
+        }
+        #endregion
+
+        #region Negative button handler 
         private void NegativeButton_Click(object sender, RoutedEventArgs e)
         {
             double number;
-            if(double.TryParse(resultLable.Content.ToString(), out number))
+            if (double.TryParse(resultLable.Content.ToString(), out number))
             {
                 number = number * (-1);
                 resultLable.Content = number.ToString();
             }
         }
+        #endregion
 
-        //AC button
+
+        #region AC button handler 
         private void ACButton_Click(object sender, RoutedEventArgs e)
         {
             resultLable.Content = "0";
             result = 0;
             lastNumber = 0;
         }
+        #endregion
 
 
-
-        //numbers : all
-
+        #region Number buttons handler 
         private void numberButton_Click(object sender, RoutedEventArgs e)
         {
             /*int selectedValue=0;
@@ -150,12 +157,12 @@ namespace Calculator_WPF
             
              rather than doing so manu if else operation we can directly use the number inside Button Content
             as the Content is in string we can parse it into int to get it integer value and then assign that integer value to the button clicks*/
-            int selectedValue= int.Parse((sender as Button).Content.ToString()); // we make our sender our usable button only and assign value to it
-            if(resultLable.Content.ToString() == "0")
+            int selectedValue = int.Parse((sender as Button).Content.ToString()); // we make our sender our usable button only and assign value to it
+            if (resultLable.Content.ToString() == "0")
             {
                 /*resultLable.Content = $"{selectedValue}";*/
 
-                resultLable.Content= selectedValue.ToString();
+                resultLable.Content = selectedValue.ToString();
             }
             else
             {
@@ -163,17 +170,19 @@ namespace Calculator_WPF
             }
         }
 
-        //operation buttons 
+        #endregion
 
-        private void operationButton_click(object sender, RoutedEventArgs e)   
+        #region operations button handler   
+
+        private void operationButton_click(object sender, RoutedEventArgs e)
         {
-            
-                if(double.TryParse(resultLable.Content.ToString(), out lastNumber))
-                {
-                    //lastnumber here is alreadyy assigned so when you click a operation button 
-                    //the value inside the resultLable should become zero
 
-                    resultLable.Content = "0";
+            if (double.TryParse(resultLable.Content.ToString(), out lastNumber))
+            {
+                //lastnumber here is alreadyy assigned so when you click a operation button 
+                //the value inside the resultLable should become zero
+
+                resultLable.Content = "0";
 
                 if (sender == multiplyButton)
                 {
@@ -191,11 +200,13 @@ namespace Calculator_WPF
                 {
                     selectedOperator = SelectedOperator.Substraction;
                 }
-            }
-                
-            
-        }
-    }
 
-    
+
+
+            }
+        }
+        #endregion
+
+
+    }
 }
